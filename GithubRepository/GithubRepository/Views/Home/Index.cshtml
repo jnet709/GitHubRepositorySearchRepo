@@ -1,0 +1,92 @@
+﻿@{
+    ViewBag.Title = "Repository Search";
+}
+
+<h2>Search Repositories</h2>
+
+<div ng-app="repoModule" ng-controller="repoCtrl" class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">Key term</label>
+                <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                    <input type="text" class="form-control" ng-model="searchObject.q" placeholder="Please enter key term"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">Language</label>
+                <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                    <input type="text" class="form-control" ng-model="searchObject.language" placeholder="Please enter programming language"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-offset-2 col-sm-offset-2 col-md-offset-2 col-lg-offset-2 col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                    <button type="button" class="btn btn-primary" ng-click="getRepos()">
+                        Search <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">Go to page</label>
+                <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                    <select class="form-control" ng-change="getAnotherPage()" ng-model="selectedPage">
+                        <option ng-repeat="page in pages" ng-value="item.value">{{page.text}}</option>
+                    </select>
+                    
+                </div>
+            </div>
+           
+        </div>
+    </div>
+    <br/>
+    <div class="row" ng-show="isLoading">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <span style="font-style: italic">Loading data... </span><img ng-src="../../Images/loading.gif" />
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <span style="font-style: italic" ><i class="glyphicon glyphicon-flag" aria-hidden="true"></i>Note: click on a particular list column to sort the list by that column.</span>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 myPointer" ng-click="sort('name')">
+            Repositoty Name <span ng-show="predicate === 'name'" class="sortorder" ng-class="{reverse:reverse}"> </span>
+        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 myPointer" ng-click="sort('login')"  >
+            Owner <span ng-show="predicate === 'login'" class="sortorder" ng-class="{reverse:reverse}"> </span>
+        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 myPointer" ng-click="sort('description')"  >
+            Description <span ng-show="predicate === 'description'" class="sortorder" ng-class="{reverse:reverse}"> </span>
+        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            Commands
+        </div>
+        <div class="row" ng-repeat="r in repositories | orderBy:predicate:reverse">
+            <div ng-style="{'color': getColorGlobal($index)}">
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    {{r.name}}
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    {{r.owner.login}}
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    {{r.description}}
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 buttons">
+                    <button class="btn btn-primary" ng-click="getDetails(r.name, r.owner.login)">Details <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span></button>
+                    <button class="btn btn-success" ng-click="gotoRepoCommitPage($index)">Commits <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div kn-repo-template-dirct></div>
+</div>

@@ -1,0 +1,58 @@
+﻿
+@{
+    ViewBag.Title = "RepoCommits";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Repository's Commits</h2>
+
+<div ng-app="repoModule" ng-controller="repoCommitCtrl" class="container">
+    <div class="row">
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <label>Repository:</label>
+        </div>
+        <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+            {{searchObject.repo}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <label>Owner:</label>
+        </div>
+        <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+            {{searchObject.owner}}
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 myPointer" ng-click="sort('name')">
+            Committer <span ng-show="predicate === 'name'" class="sortorder" ng-class="{reverse:reverse}"> </span>
+        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 myPointer" ng-click="sort('email')">
+            Email <span ng-show="predicate === 'email'" class="sortorder" ng-class="{reverse:reverse}"> </span>
+        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 myPointer" ng-click="sort('date')">
+            Date <span ng-show="predicate === 'date'" class="sortorder" ng-class="{reverse:reverse}"> </span>
+        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 myPointer" ng-click="sort('message')">
+            Message <span ng-show="predicate === 'message'" class="sortorder" ng-class="{reverse:reverse}"> </span>
+        </div>
+        <div class="row" ng-repeat="c in commits | orderBy:predicate:reverse">
+            <div ng-style="{'color': getColorGlobal($index)}">
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    {{c.commit.author.name}}
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    {{c.commit.author.email}}
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    {{c.commit.author.date | date:"MM/dd/yyyy 'at' h:mma"}}
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    {{c.commit.message}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
